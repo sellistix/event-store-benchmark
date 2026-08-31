@@ -14,3 +14,4 @@ performance:
     - umadb
     - kurrentdb
     - axonserver
+    - boomerang
