@@ -25,6 +25,7 @@ adapters = [
     'foundationdb-dcb',
     'eventsourcingdb',
     'fact',
+    'boomerang',
     'dummy',
 ]
 
@@ -34,7 +35,6 @@ ADAPTER_COLORS = {
     adapter: cmap(i)
     for i, adapter in enumerate(adapters)
 }
-
 
 def get_adapter_color(adapter_name: str) -> Any:
     """Get consistent color for an adapter."""

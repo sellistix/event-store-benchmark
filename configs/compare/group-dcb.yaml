@@ -1,4 +1,4 @@
-# DCB group: tephra vs umadb vs axonserver, the three DCB-capable stores in this suite.
+# DCB group: tephra vs umadb vs axonserver vs boomerang, the four DCB-capable stores in this suite.
 #
 # Fairness settings baked in here and in the testcontainers, recorded per run in
 # run_manifest.json:
@@ -32,7 +32,7 @@ performance:
   concurrency: { writers: [1, 4, 16, 64, 128] }
   operations:
     write: { event_size_bytes: 256, concurrency_control: true, append_condition: one_tag_one_type, batch_size: 1 }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # Concurrency x batch matrix (batch 64): separates latency from throughput at a mid batch size.
 performance:
@@ -46,7 +46,7 @@ performance:
   concurrency: { writers: [1, 16, 64] }
   operations:
     write: { event_size_bytes: 256, concurrency_control: true, append_condition: one_tag_one_type, batch_size: 64 }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # Concurrency x batch matrix (batch 512): shows large-batch behaviour is concurrency dependent
 # (a large synchronous batch at low concurrency is latency-bound, not a store ceiling).
@@ -61,7 +61,7 @@ performance:
   concurrency: { writers: [1, 16, 64] }
   operations:
     write: { event_size_bytes: 256, concurrency_control: true, append_condition: one_tag_one_type, batch_size: 512 }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # Write flood: pipelined fire-hose, many appends in flight per worker (unconditional). Peak
 # sustained ingest, the ceiling test.
@@ -76,7 +76,7 @@ performance:
   concurrency: { writers: [16, 64] }
   operations:
     write: { event_size_bytes: 256, in_flight_limit: 256, batch_size: 1 }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # Write payload sweep at fixed 16 writers (conditional), to isolate payload-size effects.
 performance:
@@ -90,7 +90,7 @@ performance:
   concurrency: { writers: [16] }
   operations:
     write: { event_size_bytes: 64, concurrency_control: true, append_condition: one_tag_one_type }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: wp-1024
@@ -103,7 +103,7 @@ performance:
   concurrency: { writers: [16] }
   operations:
     write: { event_size_bytes: 1024, concurrency_control: true, append_condition: one_tag_one_type }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: wp-16384
@@ -116,7 +116,7 @@ performance:
   concurrency: { writers: [16] }
   operations:
     write: { event_size_bytes: 16384, concurrency_control: true, append_condition: one_tag_one_type }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # ============================================================================================
 # READS - WARM regime (50k-event corpus, cache-resident within the 4 GB budget)
@@ -136,7 +136,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 10, dcb_query: one_tag_one_type }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # Selectivity / cardinality sweep at fixed 16 readers (single stream -> 1/1000 -> 1/100 ->
 # 1/10 -> full scan). The `limit` is large so each read drains its whole result set.
@@ -153,7 +153,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: one_tag_one_type }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: warm-sel-s1000
@@ -168,7 +168,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: s1000 }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: warm-sel-s100
@@ -183,7 +183,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: s100 }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: warm-sel-s10
@@ -198,7 +198,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: s10 }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: warm-sel-full
@@ -213,7 +213,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: full_scan }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # Resume-position sweep at fixed selectivity (s100), 16 readers: whole / half / recent tail.
 performance:
@@ -229,7 +229,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: s100, resume: whole }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: warm-resume-half
@@ -244,7 +244,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: s100, resume: half }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 performance:
   name: warm-resume-recent
@@ -259,7 +259,7 @@ performance:
     write: { event_size_bytes: 256 }
     read: { limit: 1000000, dcb_query: s100, resume: recent }
   setup: { prepopulate_events: 50000, prepopulate_streams: 5000, tag_scheme: graded }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # ============================================================================================
 # READS - COLD regime (~8 GB corpus > 4 GB budget -> out-of-core for every store)
@@ -285,7 +285,7 @@ performance:
     write: { event_size_bytes: 1024 }
     read: { limit: 10, dcb_query: one_tag_one_type }
   setup: { prepopulate_events: 8000000, prepopulate_streams: 8000, tag_scheme: graded, prepopulate_concurrency: 16 }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]
 ---
 # Cold sequential window: read a bounded ~10k-event window (~10 MiB) starting at a fresh random
 # global position each op (resume: random). Successive reads hit different cold regions of the log
@@ -303,4 +303,4 @@ performance:
     write: { event_size_bytes: 1024 }
     read: { limit: 10000, dcb_query: full_scan, resume: random }
   setup: { prepopulate_events: 8000000, prepopulate_streams: 8000, tag_scheme: graded, prepopulate_concurrency: 16 }
-  stores: [tephra, umadb, axonserver]
+  stores: [tephra, umadb, axonserver, boomerang]

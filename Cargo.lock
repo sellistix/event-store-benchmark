@@ -461,6 +461,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "boomerang-adapter"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "bench-core",
+ "bench-testcontainers",
+ "libc",
+ "prost",
+ "serde_json",
+ "testcontainers",
+ "tokio",
+ "tonic",
+ "tonic-prost",
+ "tonic-prost-build",
+ "uuid",
+]
+
+[[package]]
 name = "borrow-or-share"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1077,6 +1096,7 @@ dependencies = [
  "axonserver-adapter",
  "bench-core",
  "bench-testcontainers",
+ "boomerang-adapter",
  "chrono",
  "clap 4.6.1",
  "dummy-adapter",

@@ -17,6 +17,7 @@ performance:
     - axonserver
     - postgres-dcb-ttcte
     - foundationdb-dcb
+    - boomerang
 ---
 performance:
   name: warmup-read-one-tag-one-type
@@ -39,6 +40,7 @@ performance:
     - axonserver
     - postgres-dcb-ttcte
     - foundationdb-dcb
+    - boomerang
 ---
 performance:
   name: write-one-tag-one-type
@@ -59,6 +61,7 @@ performance:
     - axonserver
     - postgres-dcb-ttcte
     - foundationdb-dcb
+    - boomerang
 ---
 performance:
   name: read-one-tag-one-type
@@ -83,6 +86,7 @@ performance:
     - axonserver
     - postgres-dcb-ttcte
     - foundationdb-dcb
+    - boomerang
 ---
 performance:
   name: subscribe-all
@@ -101,3 +105,4 @@ performance:
     - axonserver
     - postgres-dcb-ttcte
     - foundationdb-dcb
+    - boomerang

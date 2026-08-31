@@ -7,6 +7,7 @@ edition = "2021"
 # Do NOT include "foundationdb" in the default list
 default = []
 umadb = ["dep:umadb-adapter"]
+boomerang = ["dep:boomerang-adapter"]
 tephra = ["dep:tephra-adapter"]
 kurrentdb = ["dep:kurrentdb-adapter"]
 axonserver = ["dep:axonserver-adapter"]
@@ -34,6 +35,7 @@ tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 # Adapters
 dummy-adapter = { path = "../adapters/dummy" }
 umadb-adapter = { path = "../adapters/umadb", optional = true }
+boomerang-adapter = { path = "../adapters/boomerang", optional = true }
 tephra-adapter = { path = "../adapters/tephra", optional = true }
 kurrentdb-adapter = { path = "../adapters/kurrentdb", optional = true }
 axonserver-adapter = { path = "../adapters/axonserver", optional = true }

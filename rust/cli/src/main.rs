@@ -63,6 +63,11 @@ fn store_manager_factories() -> Vec<Box<dyn StoreManagerFactory>> {
         factories.push(Box::new(umadb_adapter::UmaDbFactory));
     }
 
+    #[cfg(feature = "boomerang")]
+    {
+        factories.push(Box::new(boomerang_adapter::BoomerangFactory));
+    }
+
     #[cfg(feature = "tephra")]
     {
         factories.push(Box::new(tephra_adapter::TephraFactory));

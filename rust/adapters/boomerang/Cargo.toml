@@ -1,0 +1,23 @@
+[package]
+name = "boomerang-adapter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+async-trait = "0.1"
+bench-core = { path = "../../bench-core" }
+bench-testcontainers = { path = "../../testcontainers" }
+prost = "0.14"
+serde_json = "1"
+testcontainers = "0.27"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
+tonic = { version = "0.14", features = ["tls-aws-lc", "tls-native-roots", "codegen"] }
+tonic-prost = "0.14"
+uuid = { version = "1", features = ["v4"] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[build-dependencies]
+tonic-prost-build = "0.14"
