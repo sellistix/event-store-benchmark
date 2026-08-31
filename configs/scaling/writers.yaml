@@ -16,4 +16,5 @@ performance:
     - kurrentdb
     - axonserver
     - eventsourcingdb
+    - boomerang
     - dummy

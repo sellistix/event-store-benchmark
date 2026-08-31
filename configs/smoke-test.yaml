@@ -21,6 +21,7 @@ performance:
     - axonserver
     - eventsourcingdb
     - fact
+    - boomerang
     - dummy
 ---
 performance:
@@ -46,4 +47,5 @@ performance:
     - axonserver
     - eventsourcingdb
     - fact
+    - boomerang
     - dummy
