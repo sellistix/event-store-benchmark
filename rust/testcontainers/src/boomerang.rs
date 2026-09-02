@@ -22,6 +22,15 @@ fn segment_max_bytes_override() -> Option<String> {
         .filter(|s| !s.is_empty())
 }
 
+/// Optional host override forwarded into the container as
+/// `BOOMERANG_DELIVERY_LINGER_MS` (delivery linger window in ms; `0` disables).
+/// Unset keeps the image default (on at 1 ms on the bench host since `a57f091`).
+fn delivery_linger_override() -> Option<String> {
+    std::env::var("BOOMERANG_DELIVERY_LINGER_MS")
+        .ok()
+        .filter(|s| !s.is_empty())
+}
+
 impl Boomerang {
     pub fn new(data_dir: Option<String>, durability: &str) -> Self {
         let mount = match data_dir {
@@ -37,6 +46,10 @@ impl Boomerang {
             println!("BOOMERANG_SEGMENT_MAX_BYTES={bytes}");
             env_vars.push(("BOOMERANG_SEGMENT_MAX_BYTES", bytes));
         }
+        if let Some(ms) = delivery_linger_override() {
+            println!("BOOMERANG_DELIVERY_LINGER_MS={ms}");
+            env_vars.push(("BOOMERANG_DELIVERY_LINGER_MS", ms));
+        }
         Self {
             env_vars,
             mounts: vec![mount],
@@ -50,6 +63,7 @@ impl Boomerang {
             "durability": durability,
             "git_sha": image_git_sha(),
             "segment_max_bytes": segment_max_bytes_override(),
+            "delivery_linger_ms": delivery_linger_override(),
         })
     }
 }
