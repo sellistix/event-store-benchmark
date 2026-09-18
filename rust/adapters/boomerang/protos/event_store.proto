@@ -38,8 +38,14 @@ service EventStoreService {
 // Shared: serialized event
 // ─────────────────────────────────────────────────────────────────────────────
 message SerializedEventProto {
-  string type_name = 1;   // Assembly-qualified CLR type name
-  bytes  payload   = 2;   // MemoryPack-encoded event bytes
+  string type_name      = 1;  // Catalog family token, not a CLR FullName
+  bytes  payload        = 2;  // Opaque event payload bytes (codec named by codec_id)
+  reserved 3;                 // was string content_type — do not reuse (K11)
+  int32  schema_version = 4;  // First-class family version as stamped by the writer
+  // Codec id (K4): 1 JSON · 2 MemoryPack · 3 Avro · 4 Protobuf.
+  // 1–63 LawnDart-reserved. 64–254 user-registered. 255 opaque / unspecified bytes.
+  // 0 is never valid on a durable frame.
+  uint32 codec_id       = 5;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

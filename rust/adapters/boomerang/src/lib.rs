@@ -260,6 +260,8 @@ impl BoomerangAdapter {
             .map(|evt| SerializedEventProto {
                 type_name: evt.event_type.to_string(),
                 payload: evt.payload.to_vec(),
+                codec_id: 255, // opaque / unspecified bytes — raw sittings are not MemoryPack
+                schema_version: 0,
             })
             .collect()
     }
